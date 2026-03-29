@@ -1,29 +1,27 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
+  name: String,
   email: {
     type: String,
-    required: true,
     unique: true
   },
-  password: {
-    type: String,
-    required: true
-  },
+  password: String,
+
   role: {
     type: String,
     enum: ["parent", "admin"],
     default: "parent"
   },
+
   studentId: {
-    type: String
-  }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Student"
+  },
+
+  resetToken: String,
+  resetTokenExpiry: Date
+
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);
-resetToken: String,
-resetTokenExpiry: Date
