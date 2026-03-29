@@ -1,85 +1,58 @@
-// 🔐 LOGIN
-const form = document.getElementById("loginForm");
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("JS Loaded");
 
-if (form) {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  // 🔐 LOGIN
+  const form = document.getElementById("loginForm");
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    try {
-      const res = await fetch("https://parent-portal-1.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      });
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-      const data = await res.json();
+      try {
+        const res = await fetch("https://parent-portal-1.onrender.com/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "dashboard.html";
-      } else {
-        alert(data.message || "Login failed");
+        const data = await res.json();
+
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          window.location.href = "dashboard.html";
+        } else {
+          alert(data.message || "Login failed");
+        }
+
+      } catch (err) {
+        alert("Server error");
       }
+    });
+  }
 
-    } catch (err) {
-      alert("Server error");
-    }
-  });
-}
-
-// REGISTER
-const registerForm = document.getElementById("registerForm");
-
-if (registerForm) {
-  registerForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const usn = document.getElementById("usn").value;
-    const className = document.getElementById("className").value;
-    const section = document.getElementById("section").value;
-
-    try {
-      const res = await fetch("https://parent-portal-1.onrender.com/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, email, password, usn, className, section })
-      });
-
-      const data = await res.json();
-
-      alert(data.message || "Registered successfully");
-
-      window.location.href = "index.html";
-
-    } catch (err) {
-      alert("Error registering");
-    }
-  });
-}
 
 // SEND OTP
 async function sendOtp() {
-  const email = document.getElementById("email").value;
+  const emailEl = document.getElementById("email");
+  const email = emailEl?.value;
+  if (!email) return alert("Enter email first");
 
-  await fetch("https://parent-portal-1.onrender.com/api/auth/send-otp", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email })
-  });
-
-  alert("OTP sent to your email");
+  try {
+    const res = await fetch("https://parent-portal-1.onrender.com/api/auth/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    alert(data.message || "OTP sent");
+  } catch (e) {
+    alert("Failed to send OTP");
+  }
 }
 
 
@@ -90,42 +63,54 @@ if (registerForm) {
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const data = {
-      name: name.value,
-      email: email.value,
-      password: password.value,
-      usn: usn.value,
-      className: className.value,
-      section: section.value,
-      otp: otp.value
-    };
+    const name = document.getElementById("name")?.value;
+    const email = document.getElementById("email")?.value;
+    const password = document.getElementById("password")?.value;
+    const usn = document.getElementById("usn")?.value;
+    const className = document.getElementById("className")?.value;
+    const section = document.getElementById("section")?.value;
+    const otp = document.getElementById("otp")?.value;
 
-    const res = await fetch("https://parent-portal-1.onrender.com/api/auth/verify-otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
+    if (!name || !email || !password || !usn || !className || !section || !otp) {
+      return alert("Fill all fields including OTP");
+    }
 
-    const result = await res.json();
+    try {
+      const res = await fetch("https://parent-portal-1.onrender.com/api/auth/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, usn, className, section, otp })
+      });
 
-    alert(result.message);
+      const result = await res.json();
+      alert(result.message || "Registered");
+
+      if (res.ok) {
+        window.location.href = "index.html";
+      }
+    } catch (err) {
+      alert("Error registering");
+    }
   });
 }
 
+
 // FORGOT
 async function forgot() {
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email")?.value;
+  if (!email) return alert("Enter email");
 
-  const res = await fetch("https://parent-portal-1.onrender.com/api/auth/forgot-password", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ email })
-  });
-
-  const data = await res.json();
-  alert(data.message);
+  try {
+    const res = await fetch("https://parent-portal-1.onrender.com/api/auth/forgot-password", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    alert(data.message);
+  } catch (e) {
+    alert("Error sending reset link");
+  }
 }
 
 
@@ -133,17 +118,22 @@ async function forgot() {
 async function reset() {
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
+  const newPassword = document.getElementById("password")?.value;
 
-  const newPassword = document.getElementById("password").value;
+  if (!token || !newPassword) return alert("Invalid request");
 
-  const res = await fetch("https://parent-portal-1.onrender.com/api/auth/reset-password", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ token, newPassword })
-  });
+  try {
+    const res = await fetch("https://parent-portal-1.onrender.com/api/auth/reset-password", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ token, newPassword })
+    });
 
-  const data = await res.json();
-  alert(data.message);
+    const data = await res.json();
+    alert(data.message);
+  } catch (e) {
+    alert("Error resetting password");
+  }
 }
 
 // 📊 DASHBOARD
@@ -217,3 +207,4 @@ function logout() {
   localStorage.removeItem("token");
   window.location.href = "index.html";
 }
+});
