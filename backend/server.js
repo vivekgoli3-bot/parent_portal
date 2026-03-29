@@ -9,7 +9,7 @@ const app = express();
 
 // ✅ MIDDLEWARE (CORS FIXED)
 app.use(cors({
-  origin: "https://parent-portal1.netlify.app",
+  origin: "https://parent-portal1.netlify.app/",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
