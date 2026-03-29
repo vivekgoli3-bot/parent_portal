@@ -3,6 +3,15 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
+const app = express();
+
+app.use(cors({
+  origin: "https://parent-portal1.netlify.app",
+  credentials: true
+}));
+
+app.use(express.json());
+
 // ✅ Import routes
 import authRoutes from "./routes/authRoutes.js";
 import studentRoutes from "./routes/studentRoutes.js";
@@ -13,7 +22,7 @@ import parentRoutes from "./routes/parentRoutes.js";
 dotenv.config();
 
 // ✅ CREATE APP FIRST
-const app = express();
+
 
 // ✅ MIDDLEWARE
 app.use(cors());
