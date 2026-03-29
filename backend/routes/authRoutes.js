@@ -1,14 +1,23 @@
 import express from "express";
-import { register, login } from "../controllers/authController.js";
+import {
+  login,
+  sendOtpForRegister,
+  verifyOtpAndRegister,
+  forgotPassword,
+  resetPassword
+} from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.post("/register", register);
+// 🔐 LOGIN
+router.post("/login", login);
+
+// 🔑 OTP REGISTER
 router.post("/send-otp", sendOtpForRegister);
 router.post("/verify-otp", verifyOtpAndRegister);
-router.post("/login", login);
+
+// 🔁 FORGOT PASSWORD
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
-
 
 export default router;
