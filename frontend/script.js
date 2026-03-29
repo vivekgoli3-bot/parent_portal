@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // SEND OTP
-async function sendOtp() {
+window.sendOtp = async function () {
   const emailEl = document.getElementById("email");
   const email = emailEl?.value;
   if (!email) return alert("Enter email first");
@@ -96,7 +96,7 @@ if (registerForm) {
 
 
 // FORGOT
-async function forgot() {
+window.forgot = async function () {
   const email = document.getElementById("email")?.value;
   if (!email) return alert("Enter email");
 
@@ -115,7 +115,7 @@ async function forgot() {
 
 
 // RESET
-async function reset() {
+window.reset = async function () {
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
   const newPassword = document.getElementById("password")?.value;
