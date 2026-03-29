@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("JS Loaded");
+  console.log("OTP button clicked");
 
   // 🔐 LOGIN
   const form = document.getElementById("loginForm");
