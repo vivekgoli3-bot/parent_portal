@@ -3,12 +3,18 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
+dotenv.config();
+
 const app = express();
 
+// ✅ MIDDLEWARE (CORS FIXED)
 app.use(cors({
   origin: "https://parent-portal1.netlify.app",
-  credentials: true
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+app.options("*", cors()); // handle preflight
 
 app.use(express.json());
 
@@ -18,15 +24,6 @@ import studentRoutes from "./routes/studentRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import marksRoutes from "./routes/marksRoutes.js";
 import parentRoutes from "./routes/parentRoutes.js";
-
-dotenv.config();
-
-// ✅ CREATE APP FIRST
-
-
-// ✅ MIDDLEWARE
-app.use(cors());
-app.use(express.json());
 
 // ✅ ROUTES (AFTER app creation)
 app.use("/api/auth", authRoutes);
