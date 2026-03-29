@@ -67,6 +67,84 @@ if (registerForm) {
   });
 }
 
+// SEND OTP
+async function sendOtp() {
+  const email = document.getElementById("email").value;
+
+  await fetch("https://parent-portal-1.onrender.com/api/auth/send-otp", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email })
+  });
+
+  alert("OTP sent to your email");
+}
+
+
+// VERIFY + REGISTER
+const registerForm = document.getElementById("registerForm");
+
+if (registerForm) {
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      usn: usn.value,
+      className: className.value,
+      section: section.value,
+      otp: otp.value
+    };
+
+    const res = await fetch("https://parent-portal-1.onrender.com/api/auth/verify-otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    alert(result.message);
+  });
+}
+
+// FORGOT
+async function forgot() {
+  const email = document.getElementById("email").value;
+
+  const res = await fetch("https://parent-portal-1.onrender.com/api/auth/forgot-password", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ email })
+  });
+
+  const data = await res.json();
+  alert(data.message);
+}
+
+
+// RESET
+async function reset() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
+  const newPassword = document.getElementById("password").value;
+
+  const res = await fetch("https://parent-portal-1.onrender.com/api/auth/reset-password", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ token, newPassword })
+  });
+
+  const data = await res.json();
+  alert(data.message);
+}
 
 // 📊 DASHBOARD
 if (window.location.pathname.includes("dashboard.html")) {
@@ -86,21 +164,53 @@ if (window.location.pathname.includes("dashboard.html")) {
   .then(data => {
     console.log(data);
 
-    document.getElementById("data").innerHTML = `
-      <div style="border:1px solid #ccc; padding:15px; margin:10px;">
-        <h3>Attendance: ${data.attendance?.percentage || 0}%</h3>
-      </div>
+    // 🔹 PROFILE (fallback values)
+    document.getElementById("studentName").innerText = "Student";
+    document.getElementById("studentClass").innerText = "BCA";
+    document.getElementById("studentSection").innerText = "A";
 
-      <div style="border:1px solid #ccc; padding:15px;">
-        <h3>Marks</h3>
-        <ul>
-          ${data.marks?.subjects?.map(s => `<li>${s.name}: ${s.marks}</li>`).join("") || "No marks available"}
-        </ul>
-      </div>
-    `;
+    // 🔹 ATTENDANCE
+    const attendance = data.attendance?.percentage || 0;
+
+    const badge = document.getElementById("attendanceBadge");
+    badge.innerText = attendance + "%";
+
+    // 🎨 COLOR BADGE
+    if (attendance > 75) {
+      badge.className = "badge bg-success";
+    } else if (attendance > 50) {
+      badge.className = "badge bg-warning";
+    } else {
+      badge.className = "badge bg-danger";
+    }
+
+    // 📊 Attendance Chart
+    new Chart(document.getElementById("attendanceChart"), {
+      type: "doughnut",
+      data: {
+        labels: ["Present", "Absent"],
+        datasets: [{
+          data: [attendance, 100 - attendance]
+        }]
+      }
+    });
+
+    // 📊 Marks Chart
+    const subjects = data.marks?.subjects || [];
+
+    new Chart(document.getElementById("marksChart"), {
+      type: "bar",
+      data: {
+        labels: subjects.map(s => s.name),
+        datasets: [{
+          label: "Marks",
+          data: subjects.map(s => s.marks)
+        }]
+      }
+    });
+
   });
 }
-
 
 // 🚪 LOGOUT
 function logout() {
