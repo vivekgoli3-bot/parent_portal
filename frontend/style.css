@@ -1,51 +1,70 @@
 body {
   margin: 0;
-  font-family: Arial;
-  background: linear-gradient(135deg, #7b5cff, #ff7eb3);
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #6a5cff, #ff7eb3);
 }
 
-.center {
+/* NAVBAR */
+.navbar {
+  height: 60px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 100vh;
-}
-
-.glass-card {
-  padding: 30px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(15px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.container {
-  margin: 40px;
-}
-
-.header {
+  padding: 0 20px;
   color: white;
 }
 
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  position: fixed;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  padding-top: 20px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 15px;
+  color: white;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* MAIN CONTENT */
+.main {
+  margin-left: 220px;
+  padding: 20px;
+}
+
+/* CARDS */
 .card {
   background: white;
   padding: 20px;
-  margin-bottom: 20px;
   border-radius: 15px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s ease;
 }
 
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-}
-
+/* BUTTON */
 button {
-  width: 100%;
   padding: 10px;
-  background: linear-gradient(135deg, #7b5cff, #ff7eb3);
-  color: white;
   border: none;
   border-radius: 10px;
+  background: linear-gradient(135deg, #6a5cff, #ff7eb3);
+  color: white;
   cursor: pointer;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
 }

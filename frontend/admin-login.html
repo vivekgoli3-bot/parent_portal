@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Panel</title>
+  <title>Admin Login</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,15 +20,13 @@
 
 <div class="main">
 
-  <!-- SUBJECTS -->
   <div class="card">
     <h3>Subjects</h3>
     <input id="classSub" placeholder="Class">
-    <input id="subjectsInput" placeholder="Math,Science,English">
+    <input id="subjectsInput" placeholder="Subjects">
     <button onclick="saveSubjects()">Save</button>
   </div>
 
-  <!-- CREATE STUDENT -->
   <div class="card">
     <h3>Create Student</h3>
     <input id="name" placeholder="Name">
@@ -40,7 +38,6 @@
     <button onclick="createStudent()">Create</button>
   </div>
 
-  <!-- MARKS -->
   <div class="card">
     <h3>Marks</h3>
     <select id="studentDropdown"></select>
@@ -48,31 +45,6 @@
     <button onclick="loadSubjects()">Load Subjects</button>
     <div id="subjectsUI"></div>
     <button onclick="saveMarks()">Save Marks</button>
-  </div>
-
-  <!-- ATTENDANCE -->
-  <div class="card">
-    <h3>Attendance</h3>
-    <select id="studentDropdownAtt"></select>
-    <input id="present" placeholder="Present">
-    <input id="absent" placeholder="Absent">
-    <button onclick="saveAttendance()">Save</button>
-  </div>
-
-  <!-- STUDENT TABLE -->
-  <div class="card">
-    <h3>Students</h3>
-    <button onclick="loadStudentsTable()">Refresh</button>
-    <table border="1" width="100%" id="studentTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Class</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
   </div>
 
 </div>

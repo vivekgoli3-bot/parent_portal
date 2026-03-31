@@ -7,8 +7,18 @@
 </head>
 <body>
 
-<div class="container">
-  <h2 class="header">Student Dashboard</h2>
+<div class="navbar">
+  <h3>Student Dashboard</h3>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div class="sidebar">
+  <a href="#">Dashboard</a>
+  <a href="#">Marks</a>
+  <a href="#">Attendance</a>
+</div>
+
+<div class="main">
 
   <div class="card">
     <h3>Marks</h3>
@@ -19,6 +29,7 @@
     <h3>Attendance</h3>
     <canvas id="attendanceChart"></canvas>
   </div>
+
 </div>
 
 <script src="script.js"></script>
