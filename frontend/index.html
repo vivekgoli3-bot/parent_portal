@@ -2,23 +2,31 @@
 <html>
 <head>
   <title>Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="landing-body">
 
-<div class="center">
-  <div class="glass-card">
-    <h2>Parent Portal</h2>
+<main class="landing-shell">
+  <section class="landing-copy">
+    <p class="eyebrow">School Operations</p>
+    <h1>One portal for admin workflows and parent visibility.</h1>
+    <p class="hero-copy">
+      Keep academic records organized, publish marks faster, and give families a clearer view of student progress.
+    </p>
+  </section>
 
-    <button onclick="location.href='student-login.html'">
-      Student Login
-    </button>
+  <section class="glass-card entry-card">
+    <h2>Choose your workspace</h2>
+    <p class="subtle-text">Pick the experience that matches your role.</p>
 
-    <button onclick="location.href='admin-login.html'">
-      Admin Login
-    </button>
-  </div>
-</div>
+    <div class="button-grid">
+      <button onclick="location.href='student-login.html'">Student Dashboard</button>
+      <button class="secondary-button" onclick="location.href='admin-login.html'">Admin Panel</button>
+    </div>
+  </section>
+</main>
 
 <script src="script.js"></script>
 </body>

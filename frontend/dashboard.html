@@ -2,32 +2,62 @@
 <html>
 <head>
   <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <div class="navbar">
-  <h3>Student Dashboard</h3>
+  <div>
+    <p class="nav-kicker">Parent Portal</p>
+    <h3>Student Dashboard</h3>
+  </div>
   <button onclick="logout()">Logout</button>
 </div>
 
 <div class="sidebar">
-  <a href="#">Dashboard</a>
-  <a href="#">Marks</a>
-  <a href="#">Attendance</a>
+  <a href="#studentSummary">Overview</a>
+  <a href="#marksCard">Marks</a>
+  <a href="#attendanceCard">Attendance</a>
 </div>
 
 <div class="main">
+  <section class="page-header" id="studentSummary">
+    <p class="eyebrow">Progress snapshot</p>
+    <h1 id="studentHeading">Loading student dashboard...</h1>
+    <p id="studentMeta" class="subtle-text"></p>
+  </section>
 
-  <div class="card">
+  <div class="card stats-card">
+    <div>
+      <p class="metric-label">Subjects tracked</p>
+      <h2 id="subjectCount">0</h2>
+    </div>
+    <div>
+      <p class="metric-label">Average marks</p>
+      <h2 id="averageMarks">0</h2>
+    </div>
+    <div>
+      <p class="metric-label">Attendance rate</p>
+      <h2 id="attendanceRate">0%</h2>
+    </div>
+  </div>
+
+  <div class="card" id="marksCard">
     <h3>Marks</h3>
     <canvas id="marksChart"></canvas>
   </div>
 
-  <div class="card">
+  <div class="card" id="attendanceCard">
     <h3>Attendance</h3>
     <canvas id="attendanceChart"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>Subject Breakdown</h3>
+    <div id="subjectList" class="subject-list"></div>
   </div>
 
 </div>

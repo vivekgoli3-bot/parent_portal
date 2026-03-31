@@ -2,60 +2,78 @@
 <html>
 <head>
   <title>Admin Panel</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="navbar">
-  <h3>Admin Panel</h3>
+  <div>
+    <p class="nav-kicker">Parent Portal</p>
+    <h3>Admin Panel</h3>
+  </div>
   <button onclick="logout()">Logout</button>
 </div>
 
 <div class="sidebar">
-  <a href="#">Dashboard</a>
-  <a href="#">Students</a>
-  <a href="#">Marks</a>
-  <a href="#">Attendance</a>
+  <a href="#subjectsCard">Subjects</a>
+  <a href="#studentsCard">Students</a>
+  <a href="#marksCard">Marks</a>
+  <a href="#attendanceCard">Attendance</a>
 </div>
 
 <div class="main">
+  <section class="page-header">
+    <p class="eyebrow">Operations overview</p>
+    <h1>Manage class data with fewer clicks.</h1>
+    <p class="subtle-text">Create student accounts, assign subjects, and keep marks and attendance current.</p>
+  </section>
 
   <!-- SUBJECTS -->
-  <div class="card">
+  <div class="card" id="subjectsCard">
     <h3>Subjects</h3>
-    <input id="classSub" placeholder="Class">
-    <input id="subjectsInput" placeholder="Math,Science,English">
+    <div class="form-grid">
+      <input id="classSub" placeholder="Class">
+      <input id="subjectsInput" placeholder="Math, Science, English">
+    </div>
     <button onclick="saveSubjects()">Save</button>
   </div>
 
   <!-- CREATE STUDENT -->
-  <div class="card">
+  <div class="card" id="studentsCard">
     <h3>Create Student</h3>
-    <input id="name" placeholder="Name">
-    <input id="email" placeholder="Email">
-    <input id="password" placeholder="Password">
-    <input id="usn" placeholder="USN">
-    <input id="className" placeholder="Class">
-    <input id="section" placeholder="Section">
+    <div class="form-grid">
+      <input id="name" placeholder="Name">
+      <input id="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password">
+      <input id="usn" placeholder="USN">
+      <input id="className" placeholder="Class">
+      <input id="section" placeholder="Section">
+    </div>
     <button onclick="createStudent()">Create</button>
   </div>
 
   <!-- MARKS -->
-  <div class="card">
+  <div class="card" id="marksCard">
     <h3>Marks</h3>
-    <select id="studentDropdown"></select>
-    <input id="classFetch" placeholder="Class">
+    <div class="form-grid">
+      <select id="studentDropdown"></select>
+      <input id="classFetch" placeholder="Class">
+    </div>
     <button onclick="loadSubjects()">Load Subjects</button>
     <div id="subjectsUI"></div>
     <button onclick="saveMarks()">Save Marks</button>
   </div>
 
   <!-- ATTENDANCE -->
-  <div class="card">
+  <div class="card" id="attendanceCard">
     <h3>Attendance</h3>
-    <select id="studentDropdownAtt"></select>
-    <input id="present" placeholder="Present">
-    <input id="absent" placeholder="Absent">
+    <div class="form-grid">
+      <select id="studentDropdownAtt"></select>
+      <input id="present" type="number" min="0" placeholder="Present days">
+      <input id="absent" type="number" min="0" placeholder="Absent days">
+    </div>
     <button onclick="saveAttendance()">Save</button>
   </div>
 
@@ -63,16 +81,21 @@
   <div class="card">
     <h3>Students</h3>
     <button onclick="loadStudentsTable()">Refresh</button>
-    <table border="1" width="100%" id="studentTable">
+    <p id="adminMessage" class="status-message" aria-live="polite"></p>
+    <div class="table-wrap">
+      <table id="studentTable">
       <thead>
         <tr>
           <th>Name</th>
+          <th>USN</th>
           <th>Class</th>
+          <th>Section</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody></tbody>
-    </table>
+      </table>
+    </div>
   </div>
 
 </div>
