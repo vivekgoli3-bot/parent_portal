@@ -118,7 +118,8 @@ export const forgotPassword = async (req, res) => {
 
     const resetLink = `https://parent-portal1.netlify.app/reset.html?token=${token}`;
 
-    await sendOTP(email, `Reset your password: ${resetLink}`);
+    import { sendResetEmail } from "../utils/sendEmail.js";
+    await sendResetEmail(email, resetLink);
 
     res.json({ message: "Reset link sent to email" });
 
