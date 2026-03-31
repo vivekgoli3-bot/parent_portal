@@ -7,61 +7,102 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body class="app-body">
 
 <div class="navbar">
   <div>
-    <p class="nav-kicker">Parent Portal</p>
-    <h3>Student Dashboard</h3>
+    <p class="nav-kicker">Campus ERP</p>
+    <h3>Family Dashboard</h3>
   </div>
-  <button onclick="logout()">Logout</button>
+  <button data-logout>Logout</button>
 </div>
 
-<div class="sidebar">
-  <a href="#studentSummary">Overview</a>
-  <a href="#marksCard">Marks</a>
-  <a href="#attendanceCard">Attendance</a>
-</div>
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <p class="sidebar-label">Parent access</p>
+    <strong>Student Performance</strong>
+    <span>Marks, attendance, and class-level progress at a glance.</span>
+  </div>
 
-<div class="main">
+  <nav class="sidebar-nav">
+    <a href="#studentSummary">Overview</a>
+    <a href="#marksCard">Marks</a>
+    <a href="#attendanceCard">Attendance</a>
+  </nav>
+</aside>
+
+<main class="main">
   <section class="page-header" id="studentSummary">
     <p class="eyebrow">Progress snapshot</p>
     <h1 id="studentHeading">Loading student dashboard...</h1>
     <p id="studentMeta" class="subtle-text"></p>
   </section>
 
-  <div class="card stats-card">
-    <div>
+  <section class="metric-grid compact-metrics">
+    <article class="card metric-card">
       <p class="metric-label">Subjects tracked</p>
       <h2 id="subjectCount">0</h2>
-    </div>
-    <div>
+      <span class="metric-context">Published academic records</span>
+    </article>
+    <article class="card metric-card">
       <p class="metric-label">Average marks</p>
       <h2 id="averageMarks">0</h2>
-    </div>
-    <div>
+      <span class="metric-context">Across recorded subjects</span>
+    </article>
+    <article class="card metric-card">
       <p class="metric-label">Attendance rate</p>
       <h2 id="attendanceRate">0%</h2>
-    </div>
-  </div>
+      <span class="metric-context">Present days versus total</span>
+    </article>
+  </section>
 
-  <div class="card" id="marksCard">
-    <h3>Marks</h3>
-    <canvas id="marksChart"></canvas>
-  </div>
+  <section class="content-grid two-column-grid">
+    <article class="card chart-card" id="marksCard">
+      <div class="card-header">
+        <div>
+          <h3>Marks Trend</h3>
+          <p class="card-subtitle">Subject-wise performance</p>
+        </div>
+      </div>
+      <canvas id="marksChart"></canvas>
+    </article>
 
-  <div class="card" id="attendanceCard">
-    <h3>Attendance</h3>
-    <canvas id="attendanceChart"></canvas>
-  </div>
+    <article class="card chart-card" id="attendanceCard">
+      <div class="card-header">
+        <div>
+          <h3>Attendance Mix</h3>
+          <p class="card-subtitle">Present versus absent days</p>
+        </div>
+      </div>
+      <canvas id="attendanceChart"></canvas>
+    </article>
+  </section>
 
-  <div class="card">
-    <h3>Subject Breakdown</h3>
-    <div id="subjectList" class="subject-list"></div>
-  </div>
+  <section class="content-grid two-column-grid">
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Subject Breakdown</h3>
+          <p class="card-subtitle">Latest marks by subject</p>
+        </div>
+        <span id="subjectBreakdownCount" class="inline-pill">0 subjects</span>
+      </div>
+      <div id="subjectList" class="subject-list"></div>
+    </article>
 
-</div>
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Academic Snapshot</h3>
+          <p class="card-subtitle">Quick insights based on current records</p>
+        </div>
+        <span id="studentStatusPill" class="inline-pill">Loading</span>
+      </div>
+      <div id="studentInsightBoard" class="alert-grid single-column"></div>
+    </article>
+  </section>
+</main>
 
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>
