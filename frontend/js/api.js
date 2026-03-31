@@ -120,7 +120,7 @@ export async function apiRequest(path, options = {}) {
   const token = getToken();
   const headers = {
     ...(options.body ? { "Content-Type": "application/json" } : {}),
-    ...(!options.skipAuth && token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(!options.skipAuth && token ? { Authorization: token } : {}),
     ...(options.headers || {})
   };
 
