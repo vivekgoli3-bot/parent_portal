@@ -3,7 +3,8 @@ import { apiRequest, setSession, showStatus } from "./api.js";
 async function login(email, password, expectedRole, redirectPage) {
   const data = await apiRequest("/api/auth/login", {
     method: "POST",
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password }),
+    skipAuth: true
   });
 
   if (data.user.role !== expectedRole) {

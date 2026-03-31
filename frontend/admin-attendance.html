@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Attendance</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="app-body">
+
+<div class="navbar">
+  <div>
+    <p class="nav-kicker">Campus ERP</p>
+    <h3>Attendance Control</h3>
+  </div>
+  <button data-logout>Logout</button>
+</div>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <p class="sidebar-label">Operations</p>
+    <strong>Admin Workspace</strong>
+    <span>Separate pages for overview, admissions, academics, and attendance.</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="admin.html">Overview</a>
+    <a href="admin-students.html">Students</a>
+    <a href="admin-academics.html">Academics</a>
+    <a class="active" href="admin-attendance.html">Attendance</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <span>Live system health</span>
+    <strong id="erpHealthState">Syncing records...</strong>
+  </div>
+</aside>
+
+<main class="main">
+  <section class="page-header">
+    <p class="eyebrow">Attendance workspace</p>
+    <h1>Update attendance with a dedicated admin flow.</h1>
+    <p class="subtle-text">
+      Find students quickly, load their current attendance record, and update present or absent days without leaving the page.
+    </p>
+  </section>
+
+  <p id="attendanceMessage" class="status-banner" aria-live="polite"></p>
+
+  <section class="metric-grid compact-metrics">
+    <article class="card metric-card">
+      <p class="metric-label">Total students</p>
+      <h2 id="attendanceMetricStudents">0</h2>
+      <span class="metric-context">Students available for tracking</span>
+    </article>
+    <article class="card metric-card">
+      <p class="metric-label">Average attendance</p>
+      <h2 id="attendanceMetricAverage">0%</h2>
+      <span class="metric-context">Current school-wide attendance rate</span>
+    </article>
+    <article class="card metric-card">
+      <p class="metric-label">Needs follow-up</p>
+      <h2 id="attendanceMetricConcern">0</h2>
+      <span class="metric-context">Students below 75% attendance</span>
+    </article>
+  </section>
+
+  <section class="content-grid directory-grid">
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Attendance Directory</h3>
+          <p class="card-subtitle">Filter and open any student's attendance record</p>
+        </div>
+        <span id="attendanceResultCount" class="inline-pill">0 students</span>
+      </div>
+
+      <div class="toolbar-grid">
+        <input id="attendanceSearch" placeholder="Search by name, USN, email, or class">
+        <select id="attendanceClassFilter">
+          <option value="">All classes</option>
+        </select>
+        <select id="attendanceSectionFilter">
+          <option value="">All sections</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Class</th>
+              <th>Attendance</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="attendanceDirectoryBody"></tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Attendance Update</h3>
+          <p class="card-subtitle">Load and edit the current attendance record</p>
+        </div>
+        <span id="attendanceProfileBadge" class="inline-pill">No student selected</span>
+      </div>
+
+      <div id="attendanceEmpty" class="empty-state">
+        Select a student from the attendance directory to load the current record.
+      </div>
+
+      <div id="attendanceProfileContent" class="profile-layout hidden">
+        <div class="profile-summary">
+          <div>
+            <p class="metric-label">Student</p>
+            <h3 id="attendanceSelectedName">-</h3>
+            <p id="attendanceSelectedMeta" class="subtle-text">-</p>
+          </div>
+          <div class="profile-mini-grid">
+            <div class="mini-stat">
+              <span>Attendance Rate</span>
+              <strong id="attendanceCurrentRate">0%</strong>
+            </div>
+            <div class="mini-stat">
+              <span>Present Days</span>
+              <strong id="attendanceCurrentPresent">0</strong>
+            </div>
+            <div class="mini-stat">
+              <span>Absent Days</span>
+              <strong id="attendanceCurrentAbsent">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <form id="attendanceUpdateForm" class="stack-form">
+          <input id="attendanceStudentId" type="hidden">
+          <div class="form-grid">
+            <label>
+              <span>Student</span>
+              <select id="attendanceStudentSelect"></select>
+            </label>
+            <label>
+              <span>Present days</span>
+              <input id="attendancePresent" type="number" min="0" required>
+            </label>
+            <label>
+              <span>Absent days</span>
+              <input id="attendanceAbsent" type="number" min="0" required>
+            </label>
+          </div>
+          <button type="submit">Save Attendance Update</button>
+        </form>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

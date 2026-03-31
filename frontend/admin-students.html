@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Students</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="app-body">
+
+<div class="navbar">
+  <div>
+    <p class="nav-kicker">Campus ERP</p>
+    <h3>Student Operations</h3>
+  </div>
+  <button data-logout>Logout</button>
+</div>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <p class="sidebar-label">Operations</p>
+    <strong>Admin Workspace</strong>
+    <span>Separate pages for overview, admissions, academics, and attendance.</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="admin.html">Overview</a>
+    <a class="active" href="admin-students.html">Students</a>
+    <a href="admin-academics.html">Academics</a>
+    <a href="admin-attendance.html">Attendance</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <span>Live system health</span>
+    <strong id="erpHealthState">Syncing records...</strong>
+  </div>
+</aside>
+
+<main class="main">
+  <section class="page-header">
+    <p class="eyebrow">Students workspace</p>
+    <h1>Admissions and student records.</h1>
+    <p class="subtle-text">
+      Manage enrollment, search the directory, and update student-linked parent details from one focused page.
+    </p>
+  </section>
+
+  <p id="studentsMessage" class="status-banner" aria-live="polite"></p>
+
+  <section class="metric-grid compact-metrics">
+    <article class="card metric-card">
+      <p class="metric-label">Total students</p>
+      <h2 id="studentsMetricTotal">0</h2>
+      <span class="metric-context">Active student records</span>
+    </article>
+    <article class="card metric-card">
+      <p class="metric-label">Active classes</p>
+      <h2 id="studentsMetricClasses">0</h2>
+      <span class="metric-context">Classes with enrollment</span>
+    </article>
+    <article class="card metric-card">
+      <p class="metric-label">Attendance rate</p>
+      <h2 id="studentsMetricAttendance">0%</h2>
+      <span class="metric-context">Average attendance across the school</span>
+    </article>
+  </section>
+
+  <section class="content-grid directory-grid">
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Student Directory</h3>
+          <p class="card-subtitle">Search and filter student records instantly</p>
+        </div>
+        <span id="directoryResultCount" class="inline-pill">0 records</span>
+      </div>
+
+      <div class="toolbar-grid">
+        <input id="directorySearch" placeholder="Search by name, USN, email, or class">
+        <select id="directoryClassFilter">
+          <option value="">All classes</option>
+        </select>
+        <select id="directorySectionFilter">
+          <option value="">All sections</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Parent Email</th>
+              <th>Class</th>
+              <th>Attendance</th>
+              <th>Marks</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="studentDirectoryBody"></tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Student Profile</h3>
+          <p class="card-subtitle">Editable profile with academic snapshot</p>
+        </div>
+        <span id="profileBadge" class="inline-pill">No student selected</span>
+      </div>
+
+      <div id="profileEmpty" class="empty-state">
+        Select a student from the directory to review their linked account, marks, and attendance.
+      </div>
+
+      <div id="profileContent" class="profile-layout hidden">
+        <div class="profile-summary">
+          <div>
+            <p class="metric-label">Student</p>
+            <h3 id="profileDisplayName">-</h3>
+            <p id="profileDisplayMeta" class="subtle-text">-</p>
+          </div>
+          <div class="profile-mini-grid">
+            <div class="mini-stat">
+              <span>Attendance</span>
+              <strong id="profileAttendanceRate">0%</strong>
+            </div>
+            <div class="mini-stat">
+              <span>Average Marks</span>
+              <strong id="profileAverageMarks">0</strong>
+            </div>
+            <div class="mini-stat">
+              <span>Tracked Subjects</span>
+              <strong id="profileTrackedSubjects">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <form id="studentProfileForm" class="stack-form">
+          <input id="profileStudentId" type="hidden">
+          <div class="form-grid">
+            <label>
+              <span>Name</span>
+              <input id="profileStudentName" required>
+            </label>
+            <label>
+              <span>Parent Email</span>
+              <input id="profileParentEmail" type="email" required>
+            </label>
+            <label>
+              <span>USN</span>
+              <input id="profileUsn">
+            </label>
+            <label>
+              <span>Class</span>
+              <input id="profileClassName" required>
+            </label>
+            <label>
+              <span>Section</span>
+              <input id="profileSection">
+            </label>
+          </div>
+          <button type="submit">Update Student Profile</button>
+        </form>
+
+        <div>
+          <div class="card-header compact-header">
+            <div>
+              <h3>Marks Breakdown</h3>
+              <p class="card-subtitle">Published subjects and latest marks</p>
+            </div>
+          </div>
+          <div id="studentMarksList" class="subject-list compact-list"></div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <h3>Enroll Student</h3>
+        <p class="card-subtitle">Create a parent-linked student account</p>
+      </div>
+    </div>
+
+    <form id="studentCreateForm" class="stack-form">
+      <div class="form-grid">
+        <label>
+          <span>Student name</span>
+          <input id="createStudentName" required>
+        </label>
+        <label>
+          <span>Parent email</span>
+          <input id="createParentEmail" type="email" required>
+        </label>
+        <label>
+          <span>Temporary password</span>
+          <input id="createParentPassword" type="password" required>
+        </label>
+        <label>
+          <span>USN</span>
+          <input id="createStudentUsn">
+        </label>
+        <label>
+          <span>Class</span>
+          <input id="createStudentClass" required>
+        </label>
+        <label>
+          <span>Section</span>
+          <input id="createStudentSection">
+        </label>
+      </div>
+      <button type="submit">Create Student Account</button>
+    </form>
+  </section>
+</main>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

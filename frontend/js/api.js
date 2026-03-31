@@ -14,6 +14,24 @@ const HOME_PAGE_BY_ROLE = {
   parent: "dashboard.html"
 };
 
+function getCurrentPage() {
+  return window.location.pathname.split("/").pop();
+}
+
+function getLoginPageForCurrentContext() {
+  const currentPage = getCurrentPage();
+
+  if (currentPage.startsWith("admin")) {
+    return "admin-login.html";
+  }
+
+  if (currentPage === "dashboard.html") {
+    return "student-login.html";
+  }
+
+  return "index.html";
+}
+
 export function getToken() {
   return localStorage.getItem("token");
 }
@@ -102,7 +120,7 @@ export async function apiRequest(path, options = {}) {
   const token = getToken();
   const headers = {
     ...(options.body ? { "Content-Type": "application/json" } : {}),
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(!options.skipAuth && token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers || {})
   };
 
@@ -114,6 +132,16 @@ export async function apiRequest(path, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
+    if (response.status === 401) {
+      clearSession();
+
+      const currentPage = getCurrentPage();
+
+      if (!currentPage.includes("login")) {
+        window.location.href = getLoginPageForCurrentContext();
+      }
+    }
+
     throw new Error(data.message || data.error || "Request failed");
   }
 

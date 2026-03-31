@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Academics</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="app-body">
+
+<div class="navbar">
+  <div>
+    <p class="nav-kicker">Campus ERP</p>
+    <h3>Academic Management</h3>
+  </div>
+  <button data-logout>Logout</button>
+</div>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <p class="sidebar-label">Operations</p>
+    <strong>Admin Workspace</strong>
+    <span>Separate pages for overview, admissions, academics, and attendance.</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="admin.html">Overview</a>
+    <a href="admin-students.html">Students</a>
+    <a class="active" href="admin-academics.html">Academics</a>
+    <a href="admin-attendance.html">Attendance</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <span>Live system health</span>
+    <strong id="erpHealthState">Syncing records...</strong>
+  </div>
+</aside>
+
+<main class="main">
+  <section class="page-header">
+    <p class="eyebrow">Academics workspace</p>
+    <h1>Curriculum and marks management.</h1>
+    <p class="subtle-text">
+      Map subjects by class, load student templates, and publish marks without mixing this work with other admin flows.
+    </p>
+  </section>
+
+  <p id="academicsMessage" class="status-banner" aria-live="polite"></p>
+
+  <section class="metric-grid compact-metrics">
+    <article class="card metric-card">
+      <p class="metric-label">Subject maps</p>
+      <h2 id="academicsMetricMappings">0</h2>
+      <span class="metric-context">Classes with curriculum mapping</span>
+    </article>
+    <article class="card metric-card">
+      <p class="metric-label">Configured subjects</p>
+      <h2 id="academicsMetricSubjects">0</h2>
+      <span class="metric-context">Total subjects across classes</span>
+    </article>
+    <article class="card metric-card">
+      <p class="metric-label">Average marks</p>
+      <h2 id="academicsMetricMarks">0</h2>
+      <span class="metric-context">Across published student records</span>
+    </article>
+  </section>
+
+  <section class="content-grid operations-grid">
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Curriculum Mapping</h3>
+          <p class="card-subtitle">Define subject templates by class</p>
+        </div>
+      </div>
+
+      <form id="subjectForm" class="stack-form">
+        <div class="form-grid">
+          <label>
+            <span>Class</span>
+            <input id="subjectClassName" required>
+          </label>
+          <label class="span-2">
+            <span>Subjects</span>
+            <input id="subjectListInput" placeholder="Mathematics, Science, English" required>
+          </label>
+        </div>
+        <button type="submit">Save Curriculum Map</button>
+      </form>
+    </article>
+
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Marks Entry</h3>
+          <p class="card-subtitle">Load class template and publish marks</p>
+        </div>
+      </div>
+
+      <form id="marksForm" class="stack-form">
+        <div class="form-grid">
+          <label>
+            <span>Student</span>
+            <select id="marksStudentSelect"></select>
+          </label>
+          <label>
+            <span>Class</span>
+            <input id="marksClassInput" placeholder="Auto-fills from student">
+          </label>
+        </div>
+
+        <div class="action-row">
+          <button id="loadMarksTemplateButton" type="button" class="secondary-button">Load Subject Template</button>
+          <span id="marksTemplateStatus" class="subtle-text">Select a student to begin.</span>
+        </div>
+
+        <div id="marksFields" class="stack-form"></div>
+        <button type="submit">Save Marks</button>
+      </form>
+    </article>
+  </section>
+
+  <section class="content-grid operations-grid">
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Selected Student Snapshot</h3>
+          <p class="card-subtitle">Current marks for the student loaded in marks entry</p>
+        </div>
+        <span id="academicProfileBadge" class="inline-pill">No student selected</span>
+      </div>
+
+      <div class="profile-summary">
+        <div>
+          <p class="metric-label">Student</p>
+          <h3 id="academicStudentName">Select a student</h3>
+          <p id="academicStudentMeta" class="subtle-text">Marks and class template will appear here.</p>
+        </div>
+      </div>
+
+      <div id="studentMarksList" class="subject-list compact-list"></div>
+    </article>
+
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h3>Curriculum Directory</h3>
+          <p class="card-subtitle">Class-wise subject maps configured in the system</p>
+        </div>
+        <span id="subjectDirectoryCount" class="inline-pill">0 classes mapped</span>
+      </div>
+
+      <div id="subjectDirectoryList" class="subject-directory-grid"></div>
+    </article>
+  </section>
+</main>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
