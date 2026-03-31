@@ -183,6 +183,13 @@ async function handleCreateStudent(event) {
   event.preventDefault();
   showStatus("studentsMessage", "Creating student profile...");
 
+  const form = event.currentTarget;
+  const submitButton = form?.querySelector('button[type="submit"]');
+
+  if (submitButton) {
+    submitButton.disabled = true;
+  }
+
   try {
     const payload = {
       name: document.getElementById("createStudentName").value.trim(),
@@ -198,11 +205,15 @@ async function handleCreateStudent(event) {
       body: JSON.stringify(payload)
     });
 
-    event.target.reset();
     await refreshData(response.student?._id);
+    form.reset();
     showStatus("studentsMessage", "Student account created successfully.", { success: true });
   } catch (error) {
     showStatus("studentsMessage", error.message, { error: true });
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+    }
   }
 }
 

@@ -1,8 +1,14 @@
-const API_BASE =
+const isLocalHost =
   window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? "http://localhost:5000"
-    : "https://parent-portal-1.onrender.com";
+  window.location.hostname === "127.0.0.1";
+
+const API_BASE = window.location.protocol === "file:"
+  ? "http://localhost:5000"
+  : isLocalHost && window.location.port === "5000"
+    ? ""
+    : isLocalHost
+      ? "http://localhost:5000"
+      : "https://parent-portal-1.onrender.com";
 
 const LOGIN_PAGE_BY_ROLE = {
   admin: "admin-login.html",
