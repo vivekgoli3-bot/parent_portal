@@ -26,6 +26,10 @@ export function setHealthState(message) {
   }
 }
 
+export function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name) || "";
+}
+
 export function getClassOptions(students = []) {
   return [...new Set(students.map((student) => student.className).filter(Boolean))]
     .sort((left, right) => left.localeCompare(right));

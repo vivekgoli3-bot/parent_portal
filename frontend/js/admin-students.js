@@ -83,6 +83,7 @@ function renderDirectory() {
           <td>${student.averageMarks || 0}</td>
           <td class="action-cell">
             <button type="button" class="ghost-button" data-open-id="${student._id}">Open</button>
+            <button type="button" class="ghost-button" data-attendance-id="${student._id}">Attendance</button>
             <button type="button" class="danger-text-button" data-delete-id="${student._id}">Delete</button>
           </td>
         </tr>
@@ -262,11 +263,17 @@ function bindEvents() {
 
   elements.directoryBody.addEventListener("click", async (event) => {
     const deleteButton = event.target.closest("[data-delete-id]");
+    const attendanceButton = event.target.closest("[data-attendance-id]");
     const openButton = event.target.closest("[data-open-id]");
     const row = event.target.closest("[data-student-row]");
 
     if (deleteButton) {
       await handleDeleteStudent(deleteButton.dataset.deleteId);
+      return;
+    }
+
+    if (attendanceButton) {
+      window.location.href = `admin-attendance.html?student=${attendanceButton.dataset.attendanceId}`;
       return;
     }
 

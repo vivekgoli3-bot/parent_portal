@@ -3,6 +3,7 @@ import {
   escapeHtml,
   filterStudents,
   getClassOptions,
+  getQueryParam,
   getSectionOptions,
   initializeAdminPage,
   populateFilterSelect,
@@ -167,9 +168,16 @@ async function refreshData(nextSelectedId = state.selectedStudentId) {
 async function handleAttendanceSave(event) {
   event.preventDefault();
   const studentId = document.getElementById("attendanceStudentId").value || elements.studentSelect.value;
+  const present = Number(document.getElementById("attendancePresent").value) || 0;
+  const absent = Number(document.getElementById("attendanceAbsent").value) || 0;
 
   if (!studentId) {
     showStatus("attendanceMessage", "Select a student before saving attendance.", { error: true });
+    return;
+  }
+
+  if (present < 0 || absent < 0) {
+    showStatus("attendanceMessage", "Attendance values cannot be negative.", { error: true });
     return;
   }
 
@@ -178,8 +186,8 @@ async function handleAttendanceSave(event) {
       method: "POST",
       body: JSON.stringify({
         studentId,
-        present: Number(document.getElementById("attendancePresent").value) || 0,
-        absent: Number(document.getElementById("attendanceAbsent").value) || 0
+        present,
+        absent
       })
     });
 
@@ -224,7 +232,7 @@ async function initialize() {
   setHealthState("Loading attendance controls...");
 
   try {
-    await refreshData();
+    await refreshData(getQueryParam("student"));
     showStatus("attendanceMessage", "Attendance controls ready.", { success: true });
   } catch (error) {
     setHealthState("Attendance unavailable");

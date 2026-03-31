@@ -10,24 +10,39 @@ let attendanceChartInstance;
 
 function renderMarksChart(subjects) {
   const chartElement = document.getElementById("marksChart");
+  const statusElement = document.getElementById("marksChartStatus");
+  const hasMarks = subjects.length > 0;
+  const chartSubjects = hasMarks
+    ? subjects
+    : [{ name: "No Marks Uploaded", marks: 0 }];
 
   if (!chartElement || typeof Chart === "undefined") {
     return;
+  }
+
+  if (statusElement) {
+    statusElement.textContent = hasMarks
+      ? "Marks are shown as a subject-wise bar graph."
+      : "Marks will appear here once the admin publishes subject scores.";
   }
 
   marksChartInstance?.destroy();
   marksChartInstance = new Chart(chartElement, {
     type: "bar",
     data: {
-      labels: subjects.map((subject) => subject.name),
+      labels: chartSubjects.map((subject) => subject.name),
       datasets: [{
         label: "Marks",
-        data: subjects.map((subject) => subject.marks),
+        data: chartSubjects.map((subject) => subject.marks),
         borderRadius: 14,
-        backgroundColor: ["#2bb6f0", "#ff9360", "#55c59b", "#7f8cff", "#ff6a88"]
+        backgroundColor: hasMarks
+          ? ["#2bb6f0", "#ff9360", "#55c59b", "#7f8cff", "#ff6a88"]
+          : ["rgba(93, 112, 129, 0.45)"]
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false }
       },
@@ -43,23 +58,35 @@ function renderMarksChart(subjects) {
 
 function renderAttendanceChart(attendance) {
   const chartElement = document.getElementById("attendanceChart");
+  const statusElement = document.getElementById("attendanceChartStatus");
+  const present = attendance.present || 0;
+  const absent = attendance.absent || 0;
+  const hasAttendance = present + absent > 0;
 
   if (!chartElement || typeof Chart === "undefined") {
     return;
+  }
+
+  if (statusElement) {
+    statusElement.textContent = hasAttendance
+      ? "Attendance is shown as a present versus absent distribution chart."
+      : "Attendance will appear here once the admin records student attendance.";
   }
 
   attendanceChartInstance?.destroy();
   attendanceChartInstance = new Chart(chartElement, {
     type: "doughnut",
     data: {
-      labels: ["Present", "Absent"],
+      labels: hasAttendance ? ["Present", "Absent"] : ["No Attendance Uploaded"],
       datasets: [{
-        data: [attendance.present || 0, attendance.absent || 0],
-        backgroundColor: ["#2bb6f0", "#ff9360"],
+        data: hasAttendance ? [present, absent] : [1],
+        backgroundColor: hasAttendance ? ["#2bb6f0", "#ff9360"] : ["rgba(93, 112, 129, 0.45)"],
         borderWidth: 0
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       cutout: "68%"
     }
   });
@@ -130,7 +157,7 @@ async function loadDashboard() {
         `).join("")
       : "<p class='subtle-text'>Marks have not been published yet.</p>";
 
-    renderMarksChart(subjects.length ? subjects : [{ name: "No Data", marks: 0 }]);
+    renderMarksChart(subjects);
     renderAttendanceChart(attendance);
     renderInsights(averageMarks, attendanceRate, subjects.length);
   } catch (error) {
