@@ -3,15 +3,9 @@ import mongoose from "mongoose";
 const attendanceSchema = new mongoose.Schema({
   studentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Student",
-    required: true
+    ref: "Student"
   },
-  percentage: {
-    type: Number,
-    default: 0
-  },
-  totalClasses: Number,
-  attendedClasses: Number
-}, { timestamps: true });
+  percentage: Number
+});
 
 export default mongoose.model("Attendance", attendanceSchema);

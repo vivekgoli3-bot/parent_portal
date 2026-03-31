@@ -22,6 +22,8 @@ import studentRoutes from "./routes/studentRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import marksRoutes from "./routes/marksRoutes.js";
 import parentRoutes from "./routes/parentRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import adminSetupRoutes from "./routes/adminSetup.js";
 
 // ✅ ROUTES (AFTER app creation)
 app.use("/api/auth", authRoutes);
@@ -29,6 +31,8 @@ app.use("/api/students", studentRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/marks", marksRoutes);
 app.use("/api/parent", parentRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/setup", adminSetupRoutes);
 
 // ✅ TEST ROUTE
 app.get("/", (req, res) => {
