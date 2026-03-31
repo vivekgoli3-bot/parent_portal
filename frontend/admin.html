@@ -1,41 +1,49 @@
-<link rel="stylesheet" href="style.css">
-
-<div class="navbar">Admin Panel</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
 <div class="container">
+  <h2 class="header">Admin Panel</h2>
 
-<!-- CREATE SUBJECTS -->
-<div class="card">
-<h3>Subjects (per class)</h3>
-<input id="classSub" placeholder="Class (10A)">
-<input id="subjectsInput" placeholder="Math,Science,English">
-<button onclick="saveSubjects()">Save</button>
-</div>
+  <!-- SUBJECTS -->
+  <div class="card">
+    <h3>Subjects</h3>
+    <input id="classSub" placeholder="Class (10A)">
+    <input id="subjectsInput" placeholder="Math,Science,English">
+    <button onclick="saveSubjects()">Save</button>
+  </div>
 
-<!-- CREATE STUDENT -->
-<div class="card">
-<h3>Create Student</h3>
-<input id="name">
-<input id="email">
-<input id="password">
-<input id="usn">
-<input id="className">
-<input id="section">
-<button onclick="createStudent()">Create</button>
-</div>
+  <!-- STUDENT -->
+  <div class="card">
+    <h3>Create Student</h3>
+    <input id="name" placeholder="Name">
+    <input id="email" placeholder="Email">
+    <input id="password" placeholder="Password">
+    <input id="usn" placeholder="USN">
+    <input id="className" placeholder="Class">
+    <input id="section" placeholder="Section">
+    <button onclick="createStudent()">Create</button>
+  </div>
 
-<!-- ADD MARKS -->
-<div class="card">
-<h3>Add / Edit Marks</h3>
-<input id="studentId">
-<input id="classFetch" placeholder="Class">
-<button onclick="loadSubjects()">Load Subjects</button>
+  <!-- MARKS -->
+  <div class="card">
+    <h3>Add Marks</h3>
 
-<div id="subjectsUI"></div>
+    <select id="studentDropdown"></select>
+    <input id="classFetch" placeholder="Class">
 
-<button onclick="saveMarks()">Save Marks</button>
-</div>
+    <button onclick="loadSubjects()">Load Subjects</button>
 
+    <div id="subjectsUI"></div>
+
+    <button onclick="saveMarks()">Save Marks</button>
+  </div>
 </div>
 
 <script src="script.js"></script>
+</body>
+</html>

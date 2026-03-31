@@ -1,6 +1,6 @@
 const API = "https://parent-portal-1.onrender.com";
 
-// ================= LOGIN =================
+// LOGIN
 const form = document.getElementById("loginForm");
 
 if (form) {
@@ -9,12 +9,10 @@ if (form) {
 
     const res = await fetch(`${API}/api/auth/login`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: {"Content-Type":"application/json"},
       body: JSON.stringify({
-        email: document.getElementById("email").value,
-        password: document.getElementById("password").value
+        email: email.value,
+        password: password.value
       })
     });
 
@@ -29,68 +27,157 @@ if (form) {
         window.location.href = "dashboard.html";
       }
     } else {
-      alert(data.message || "Login failed");
+      alert(data.message);
     }
   });
 }
 
-// ================= SAVE SUBJECTS =================
-async function saveSubjects() {
+// CREATE STUDENT
+async function createStudent(){
   const token = localStorage.getItem("token");
 
-  await fetch(`${API}/api/admin/subjects`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token
+  await fetch(`${API}/api/admin/create-student`,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      Authorization:token
     },
-    body: JSON.stringify({
-      className: document.getElementById("classSub").value,
-      subjects: document.getElementById("subjectsInput").value.split(",")
+    body:JSON.stringify({
+      name:name.value,
+      email:email.value,
+      password:password.value,
+      usn:usn.value,
+      className:className.value,
+      section:section.value
+    })
+  });
+
+  alert("Student created");
+}
+
+// LOAD STUDENTS
+async function loadStudents(){
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${API}/api/admin/students`,{
+    headers:{Authorization:token}
+  });
+
+  const data = await res.json();
+
+  studentDropdown.innerHTML =
+    data.map(s=>`<option value="${s._id}">${s.name}</option>`).join("");
+}
+
+// SAVE SUBJECTS
+async function saveSubjects(){
+  const token = localStorage.getItem("token");
+
+  await fetch(`${API}/api/admin/subjects`,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      Authorization:token
+    },
+    body:JSON.stringify({
+      className:classSub.value,
+      subjects:subjectsInput.value.split(",")
     })
   });
 
   alert("Subjects saved");
 }
 
-// ================= LOAD SUBJECTS =================
-async function loadSubjects() {
+// LOAD SUBJECTS
+async function loadSubjects(){
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API}/api/admin/subjects/${document.getElementById("classFetch").value}`, {
-    headers: { Authorization: token }
+  const res = await fetch(`${API}/api/admin/subjects/${classFetch.value}`,{
+    headers:{Authorization:token}
   });
 
   const data = await res.json();
 
-  document.getElementById("subjectsUI").innerHTML =
-    data.subjects.map(s => `
+  subjectsUI.innerHTML =
+    data.subjects.map(s=>`
       <input placeholder="${s}" class="markInput" data-sub="${s}">
     `).join("");
 }
 
-// ================= SAVE MARKS =================
-async function saveMarks() {
+// SAVE MARKS
+async function saveMarks(){
   const token = localStorage.getItem("token");
 
   const inputs = document.querySelectorAll(".markInput");
 
-  const subjects = Array.from(inputs).map(i => ({
-    name: i.dataset.sub,
-    marks: i.value
+  const subjects = Array.from(inputs).map(i=>({
+    name:i.dataset.sub,
+    marks:i.value
   }));
 
-  await fetch(`${API}/api/admin/marks`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token
+  await fetch(`${API}/api/admin/marks`,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      Authorization:token
     },
-    body: JSON.stringify({
-      studentId: document.getElementById("studentId").value,
+    body:JSON.stringify({
+      studentId:studentDropdown.value,
       subjects
     })
   });
 
   alert("Marks saved");
+}
+
+// DASHBOARD MARKS
+async function loadMarks(){
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${API}/api/marks`,{
+    headers:{Authorization:token}
+  });
+
+  const data = await res.json();
+
+  new Chart(document.getElementById("marksChart"),{
+    type:"bar",
+    data:{
+      labels:data.subjects.map(s=>s.name),
+      datasets:[{
+        data:data.subjects.map(s=>s.marks)
+      }]
+    }
+  });
+}
+
+// ATTENDANCE
+async function loadAttendance(){
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${API}/api/attendance`,{
+    headers:{Authorization:token}
+  });
+
+  const data = await res.json();
+
+  new Chart(document.getElementById("attendanceChart"),{
+    type:"doughnut",
+    data:{
+      labels:["Present","Absent"],
+      datasets:[{
+        data:[data.present,data.absent]
+      }]
+    }
+  });
+}
+
+// AUTO LOAD
+if(window.location.pathname.includes("admin")){
+  loadStudents();
+}
+
+if(window.location.pathname.includes("dashboard")){
+  loadMarks();
+  loadAttendance();
 }
